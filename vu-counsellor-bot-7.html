@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VU Admissions Counsellor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0D1F35;
+  --gold: #C8922A;
+  --gold-lt: #F0D9A8;
+  --gold-pale: #FBF4E6;
+  --cream: #F8F5F0;
+  --white: #FFFFFF;
+  --muted: #7A7468;
+  --border: #E6DDD0;
+  --shadow-sm: 0 1px 8px rgba(13,31,53,0.06);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--navy);
+}
+
+/* HEADER */
+header {
+  background: var(--navy);
+  height: 58px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-lt) 50%, var(--gold) 70%, transparent 100%);
+}
+
+.logo-mark {
+  width: 34px; height: 34px;
+  background: var(--gold);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--navy);
+  flex-shrink: 0;
+}
+
+.logo-words { display: flex; flex-direction: column; line-height: 1.15; }
+.logo-uni { font-family: 'Playfair Display', serif; font-size: 14px; color: #fff; font-weight: 400; }
+.logo-tag { font-size: 10px; color: var(--gold-lt); font-weight: 300; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.status-pill {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+}
+
+.status-dot {
+  width: 7px; height: 7px;
+  background: #4ADE80;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* CHAT SCROLL */
+.chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scroll-behavior: smooth;
+  max-width: 760px;
+  width: 100%;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.chat-scroll::-webkit-scrollbar { width: 4px; }
+.chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* WELCOME */
+.welcome {
+  background: linear-gradient(135deg, var(--navy) 0%, #162840 100%);
+  border-radius: 18px;
+  padding: 28px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.welcome::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(200,146,42,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.w-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold-lt);
+  margin-bottom: 10px;
+}
+
+.w-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.w-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 30px;
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.18s;
+}
+
+.chip:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--navy);
+  font-weight: 500;
+}
+
+/* MESSAGES */
+.msg-row { display: flex; gap: 10px; animation: msgIn 0.25s ease; }
+.msg-row.user { flex-direction: row-reverse; }
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.avatar.bot { background: var(--navy); color: var(--gold); font-family: 'Playfair Display', serif; font-size: 14px; }
+.avatar.user { background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 600; }
+
+.bubble {
+  max-width: 78%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.bubble.bot {
+  background: var(--white);
+  color: var(--navy);
+  border: 1px solid var(--border);
+  border-top-left-radius: 3px;
+  box-shadow: var(--shadow-sm);
+}
+
+.bubble.user {
+  background: var(--navy);
+  color: rgba(255,255,255,0.92);
+  border-top-right-radius: 3px;
+}
+
+.bubble strong { font-weight: 600; }
+.bubble.user strong { color: var(--gold-lt); }
+.bubble ul { margin: 6px 0 2px 14px; display: flex; flex-direction: column; gap: 3px; }
+
+/* TYPING */
+.typing-row { display: flex; gap: 10px; animation: msgIn 0.25s ease; }
+.typing-bubble {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  border-top-left-radius: 3px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.t-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: tdot 1.2s infinite;
+}
+.t-dot:nth-child(2) { animation-delay: 0.2s; }
+.t-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes tdot {
+  0%, 60%, 100% { transform: scale(0.8); opacity: 0.35; }
+  30% { transform: scale(1.2); opacity: 1; }
+}
+
+/* SUGGESTIONS */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-left: 40px;
+  animation: msgIn 0.3s ease;
+}
+
+.sug-chip {
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--navy);
+  cursor: pointer;
+  background: var(--white);
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.15s;
+}
+
+.sug-chip:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* INPUT */
+.input-area {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
+.input-inner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+textarea {
+  flex: 1;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 15px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  color: var(--navy);
+  resize: none;
+  outline: none;
+  min-height: 44px;
+  max-height: 110px;
+  line-height: 1.5;
+  transition: border-color 0.18s;
+}
+
+textarea::placeholder { color: #BDB5A8; }
+textarea:focus { border-color: var(--gold); }
+
+.send-btn {
+  width: 44px; height: 44px;
+  background: var(--navy);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+
+.send-btn:hover { background: var(--gold); color: var(--navy); }
+.send-btn:disabled { opacity: 0.4; cursor: default; }
+.send-btn:disabled:hover { background: var(--navy); color: #fff; }
+
+/* CTA STRIP */
+.cta-strip {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.18s;
+  border: 1.5px solid var(--border);
+  color: var(--navy);
+  background: var(--white);
+  white-space: nowrap;
+}
+
+.cta-btn:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+.cta-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 600; }
+.cta-btn.primary:hover { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+@media (max-width: 480px) {
+  .bubble { max-width: 88%; }
+  .w-title { font-size: 18px; }
+  .cta-btn { font-size: 11.5px; padding: 8px 12px; }
+}
+
+/* MESSAGE LIMIT BANNER */
+.limit-bar {
+  background: var(--gold-pale);
+  border-bottom: 1px solid #E8D09A;
+  padding: 7px 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.limit-bar span { font-weight: 600; color: var(--navy); }
+
+.limit-exhausted {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  animation: msgIn 0.3s ease;
+}
+
+.le-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.le-sub { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+
+.le-btn {
+  padding: 10px 24px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.18s;
+}
+
+.le-btn:hover { background: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">V</div>
+  <div class="logo-words">
+    <span class="logo-uni">Vidyashilp University</span>
+    <span class="logo-tag">Admissions Counsellor · 2025–26</span>
+  </div>
+  <div class="status-pill">
+    <div class="status-dot"></div>
+    Online
+  </div>
+</header>
+
+
+<div class="limit-bar" id="limitBar">
+  <span id="limitCount">10</span> free messages remaining in this session
+</div>
+
+<div class="chat-scroll" id="chatScroll">
+  <div class="welcome">
+    <div class="w-eyebrow">Vidyashilp University · Admissions 2025–26</div>
+    <h1 class="w-title">Hi, I'm your VU<br><em>Admissions Counsellor.</em></h1>
+    <p class="w-sub">Ask me anything — programmes, fees, scholarships, the application process, or what life at VU looks like. I'm here to help you take the next step.</p>
+    <div class="chips">
+      <div class="chip" onclick="sendChip(this)">What programmes does VU offer?</div>
+      <div class="chip" onclick="sendChip(this)">What are the fees?</div>
+      <div class="chip" onclick="sendChip(this)">How do I apply?</div>
+      <div class="chip" onclick="sendChip(this)">What scholarships are available?</div>
+      <div class="chip" onclick="sendChip(this)">What makes VU special?</div>
+      <div class="chip" onclick="sendChip(this)">Tell me about campus life</div>
+    </div>
+  </div>
+</div>
+
+<div class="input-area">
+  <div class="input-inner">
+    <textarea id="userInput" placeholder="Ask anything about VU admissions…" rows="1"
+      onkeydown="handleKey(event)" oninput="autoGrow(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="send()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="cta-strip">
+  <a class="cta-btn" href="https://vidyashilp.edu.in/application/vu" target="_blank">🏛 Book Campus Visit</a>
+  <a class="cta-btn primary" href="https://vidyashilp.edu.in/apply" target="_blank">📋 Apply Now</a>
+  <a class="cta-btn" href="tel:08069630500">📞 080 6963 0500</a>
+</div>
+
+<script>
+const SYSTEM = `You are an enthusiastic and persuasive admissions counsellor at Vidyashilp University (VU), Bangalore. Your sole job is to help prospective students and parents choose VU. You genuinely believe VU is the best choice for them and your goal is to guide every conversation towards an application and enrolment.
+
+ABOUT VIDYASHILP UNIVERSITY:
+- Private university in North Bangalore (Rajanakunte, Yelahanka area), established under Karnataka Private Universities Act
+- Part of the Vidyashilp Education Group with a strong, trusted K-12 school legacy in Bangalore spanning decades
+- Small, intentional university — small batch sizes mean more faculty attention and a personalised experience
+- Focus: holistic, liberal, interdisciplinary education with strong industry integration
+- Bangalore location gives students proximity to India's largest tech and startup ecosystem
+- Modern, purpose-built campus with excellent infrastructure
+- Strong values-based culture inherited from the school group
+
+PROGRAMMES:
+UG: B.Tech (CS, AI/ML, Data Science, Cybersecurity, ECE, Mechanical), BCA, BBA, B.Com, BA (Liberal Arts, Psychology, Journalism, Media), B.Des, B.Sc
+PG: MBA, M.Tech, M.Sc, MA
+PhD: Select disciplines
+
+FEES (approximate annual — always confirm at vidyashilp.edu.in):
+- B.Tech: Rs 2.5L - 3.5L/yr
+- BBA/B.Com: Rs 1.5L - 2.5L/yr
+- BA/B.Sc/BCA: Rs 1L - 2L/yr
+- B.Des: Rs 2.5L - 3L/yr
+- MBA: Rs 2.5L - 4L/yr
+- Hostel: approx Rs 80K/yr. Food/misc: approx Rs 60K/yr
+
+ADMISSIONS:
+- Apply at vidyashilp.edu.in
+- B.Tech: KCET, JEE Main, or VU entrance test
+- Others: Merit + personal interview
+- Contact: admissions@vidyashilp.edu.in | 080 6963 0500
+
+SCHOLARSHIPS:
+- Merit scholarships: 25-50% tuition waiver for 90%+ board scores
+- Rank holder: potential full waiver for state/district toppers
+- Sports scholarships for state/national level athletes
+- Need-based aid available
+- Early admission discount may apply
+
+VU KEY STRENGTHS TO EMPHASISE:
+1. Small batch sizes — personalised attention, professors know every student by name
+2. Interdisciplinary curriculum — unique flexibility to take courses across departments
+3. Bangalore ecosystem — internships, industry mentors, startup exposure built in
+4. Values-based culture — safe, nurturing environment parents can trust
+5. Modern campus — purpose-built, excellent facilities
+6. Strong school legacy — the Vidyashilp name carries decades of educational trust in Bangalore
+7. Holistic development — academics, sports, arts, life skills all built into the experience
+
+HOW TO HANDLE COMPARISONS WITH OTHER UNIVERSITIES:
+- Acknowledge briefly but always redirect to VU's unique strengths
+- Emphasise what VU offers that others do not: smaller batches, interdisciplinary flexibility, Bangalore advantage, school group legacy
+- Never badmouth competitors — position VU as the smarter, more personalised choice
+- Frame VU's smaller size as an advantage: "You won't be just a roll number here"
+
+HOW TO HANDLE CONCERNS:
+- Placement concerns: Emphasise Bangalore location, industry connect, internship programme, quality individual mentoring
+- Brand concerns: Emphasise the strong Vidyashilp school legacy, skills over names, employer value
+- Fee concerns: Pivot to scholarship options, ROI of a Bangalore education, long-term value
+
+TONE AND APPROACH:
+- Warm, confident, encouraging — like a trusted guide who believes in VU
+- Use "we" and "our" — you are part of the VU family
+- Gently create urgency when appropriate: limited seats, early scholarship deadlines
+- Always end with a next step: apply now, book a campus visit, call 080 6963 0500
+- Keep answers concise — 3 to 5 sentences, then a clear call to action
+- After every answer, suggest 2-3 natural follow-up questions on a new line in this exact format: SUGGESTIONS: question one | question two | question three
+- Make suggestions feel natural and progress the conversation toward applying
+- When you do not know a specific detail, direct to admissions@vidyashilp.edu.in or call 080 6963 0500
+
+GUARDRAILS — FOLLOW THESE WITHOUT EXCEPTION:
+- Never state specific numbers you are not certain of — fees, placement figures, cutoff scores, salary data. Always qualify with "approximately" or "confirm the exact figure at vidyashilp.edu.in"
+- Never make guarantees of any kind — about admission outcomes, job placements, scholarship approval, or salary after graduation. Use phrases like "students have gone on to..." or "many of our graduates..."
+- Never invent facts. If you do not know something, say so honestly and direct the student to the admissions team: "For the most accurate answer on this, I'd recommend speaking directly with our admissions team on 080 6963 0500 — they'll give you the confirmed details."
+- Never pressure a student into a decision. Create natural urgency around real deadlines, not false scarcity.
+- If a student or parent seems upset, confused, or is raising a serious concern, always offer to connect them with a human: "I think it would be best to speak with one of our admissions counsellors directly — call us on 080 6963 0500 and they'll take care of you."
+- You represent VU with integrity. Being trustworthy is more valuable than closing every conversation.`;
+
+const API_KEY = '';
+const WORKER = 'https://vucounsellor.abhishekchhabra259.workers.dev/';
+
+let history = [];
+let loading = false;
+
+async function send() {
+  if (loading) return;
+
+  // Check message limit
+  const used = parseInt(sessionStorage.getItem('vu_msg_count') || '0');
+  const MAX = 10;
+  if (used >= MAX) {
+    showLimitExhausted();
+    return;
+  }
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendMsg('user', text);
+  history.push({ role: 'user', content: text });
+  loading = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const res = await fetch(WORKER, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || ('Error: ' + JSON.stringify(data));
+    removeTyping();
+    appendMsg('bot', reply);
+    history.push({ role: 'assistant', content: reply });
+    // Increment message count
+    const newCount = parseInt(sessionStorage.getItem('vu_msg_count') || '0') + 1;
+    sessionStorage.setItem('vu_msg_count', newCount);
+    updateLimitBar(newCount);
+  } catch(e) {
+    removeTyping();
+    appendMsg('bot', 'Sorry, I had a connection issue. Please try again in a moment.');
+  }
+
+  loading = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function sendChip(el) {
+  document.getElementById('userInput').value = el.textContent;
+  send();
+}
+
+function appendMsg(role, text) {
+  const scroll = document.getElementById('chatScroll');
+
+  let suggestions = [];
+  let cleanText = text;
+  if (role === 'bot') {
+    const sugMatch = text.match(/SUGGESTIONS:\s*(.+)$/m);
+    if (sugMatch) {
+      suggestions = sugMatch[1].split('|').map(s => s.trim()).filter(Boolean);
+      cleanText = text.replace(/\n?SUGGESTIONS:.*$/m, '').trim();
+    }
+  }
+
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+  const av = document.createElement('div');
+  av.className = 'avatar ' + role;
+  av.textContent = role === 'bot' ? 'V' : 'You';
+  const bub = document.createElement('div');
+  bub.className = 'bubble ' + role;
+  bub.innerHTML = fmt(cleanText);
+  row.appendChild(av);
+  row.appendChild(bub);
+  scroll.appendChild(row);
+
+  if (suggestions.length > 0) {
+    const chips = document.createElement('div');
+    chips.className = 'suggestions';
+    suggestions.forEach(s => {
+      const chip = document.createElement('button');
+      chip.className = 'sug-chip';
+      chip.textContent = s;
+      chip.onclick = () => {
+        chips.remove();
+        document.getElementById('userInput').value = s;
+        send();
+      };
+      chips.appendChild(chip);
+    });
+    scroll.appendChild(chips);
+  }
+
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function fmt(t) {
+  t = t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  t = t.replace(/(<li>[\s\S]*?<\/li>)+/g, m => '<ul>' + m + '</ul>');
+  t = t.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+  return t;
+}
+
+function showTyping() {
+  const scroll = document.getElementById('chatScroll');
+  const row = document.createElement('div');
+  row.className = 'typing-row';
+  row.id = 'typingRow';
+  const av = document.createElement('div');
+  av.className = 'avatar bot';
+  av.textContent = 'V';
+  const bub = document.createElement('div');
+  bub.className = 'typing-bubble';
+  bub.innerHTML = '<div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>';
+  row.appendChild(av);
+  row.appendChild(bub);
+  scroll.appendChild(row);
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function removeTyping() {
+  const el = document.getElementById('typingRow');
+  if (el) el.remove();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
+function updateLimitBar(used) {
+  const MAX = 10;
+  const remaining = Math.max(0, MAX - used);
+  const countEl = document.getElementById('limitCount');
+  const bar = document.getElementById('limitBar');
+  if (countEl) countEl.textContent = remaining;
+  if (remaining <= 3 && bar) {
+    bar.style.background = '#FDEEEC';
+    bar.style.borderColor = '#f0c4be';
+  }
+  if (remaining === 0) {
+    bar.style.display = 'none';
+  }
+}
+
+function showLimitExhausted() {
+  const scroll = document.getElementById('chatScroll');
+  // Remove existing if any
+  const existing = document.getElementById('limitExhausted');
+  if (existing) return;
+
+  const div = document.createElement('div');
+  div.className = 'limit-exhausted';
+  div.id = 'limitExhausted';
+  div.innerHTML = `
+    <div class="le-title">You've reached the demo limit.</div>
+    <div class="le-sub">This is a preview version. To continue the conversation, speak with our admissions team directly — we'd love to help you take the next step.</div>
+    <a class="le-btn" href="https://vidyashilp.edu.in/application/vu" target="_blank">Apply Now →</a>
+    <a class="le-btn" href="tel:08069630500" style="background:transparent;border:1.5px solid rgba(255,255,255,0.3);color:#fff;margin-top:-4px;">📞 Call 080 6963 0500</a>
+  `;
+  scroll.appendChild(div);
+  scroll.scrollTop = scroll.scrollHeight;
+
+  // Disable input
+  document.getElementById('userInput').disabled = true;
+  document.getElementById('userInput').placeholder = 'Demo limit reached — call us on 080 6963 0500';
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('limitBar').style.display = 'none';
+}
+
+// Init on load
+window.addEventListener('DOMContentLoaded', () => {
+  const used = parseInt(sessionStorage.getItem('vu_msg_count') || '0');
+  updateLimitBar(used);
+  if (used >= 10) showLimitExhausted();
+});
+
+</script>
+</body>
+</html>
