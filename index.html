@@ -418,6 +418,131 @@ textarea:focus { border-color: var(--gold); }
 }
 
 .le-btn:hover { background: #fff; }
+
+/* LEAD GATE */
+.lead-gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,31,53,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(6px);
+  padding: 20px;
+}
+
+.gate-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.gate-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.gate-logo {
+  width: 36px; height: 36px;
+  background: var(--gold);
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--navy);
+  flex-shrink: 0;
+}
+
+.gate-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  color: var(--navy);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.gate-sub {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.gate-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.gate-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.gate-input, .gate-select {
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px;
+  color: var(--navy);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.18s;
+  width: 100%;
+}
+
+.gate-input:focus, .gate-select:focus { border-color: var(--gold); }
+.gate-input.error, .gate-select.error { border-color: #C0392B; }
+
+.gate-error {
+  font-size: 12px;
+  color: #C0392B;
+  display: none;
+  margin-top: -8px;
+  margin-bottom: 6px;
+}
+
+.gate-btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  margin-top: 6px;
+}
+
+.gate-btn:hover { background: var(--gold); color: var(--navy); }
+.gate-btn:disabled { opacity: 0.5; cursor: default; }
+.gate-btn:disabled:hover { background: var(--navy); color: #fff; }
+
+.gate-note {
+  font-size: 11px;
+  color: #C4BAB0;
+  text-align: center;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.gate-required { color: #C0392B; }
+
 </style>
 </head>
 <body>
@@ -474,80 +599,135 @@ textarea:focus { border-color: var(--gold); }
 </div>
 
 <script>
-const SYSTEM = `You are an enthusiastic and persuasive admissions counsellor at Vidyashilp University (VU), Bangalore. Your sole job is to help prospective students and parents choose VU. You genuinely believe VU is the best choice for them and your goal is to guide every conversation towards an application and enrolment.
+const SYSTEM = `You are a warm and helpful admissions counsellor at Vidyashilp University (VU), Bangalore. Your job is to help prospective students and parents learn about VU and guide them towards the next step — visiting campus, applying, or speaking with the admissions team.
 
-ABOUT VIDYASHILP UNIVERSITY:
-- Private university in North Bangalore (Rajanakunte, Yelahanka area), established under Karnataka Private Universities Act
-- Part of the Vidyashilp Education Group with a strong, trusted K-12 school legacy in Bangalore spanning decades
-- Small, intentional university — small batch sizes mean more faculty attention and a personalised experience
-- Focus: holistic, liberal, interdisciplinary education with strong industry integration
-- Bangalore location gives students proximity to India's largest tech and startup ecosystem
-- Modern, purpose-built campus with excellent infrastructure
-- Strong values-based culture inherited from the school group
+CRITICAL RULE: You may only share information explicitly listed in this prompt. For anything not listed, say: "I want to make sure I give you accurate information on that — please call us on 080 6963 0500 or email admissions@vidyashilp.edu.in and our team will help you directly."
 
-PROGRAMMES:
-UG: B.Tech (CS, AI/ML, Data Science, Cybersecurity, ECE, Mechanical), BCA, BBA, B.Com, BA (Liberal Arts, Psychology, Journalism, Media), B.Des, B.Sc
-PG: MBA, M.Tech, M.Sc, MA
-PhD: Select disciplines
+═══════════════════════════════
+ABOUT VIDYASHILP UNIVERSITY
+═══════════════════════════════
+- Private university recognised by UGC, AICTE, BCI, and AIU
+- Address: #125, Bettenahalli, Kundana Hobli, Chapparkallu Road, Bengaluru - 562110, Karnataka
+- Located in North Bangalore — easily accessible from Yelahanka and surrounding areas
+- Established as part of the Vidyashilp Education Group, which has been running schools in Bangalore since 1982
+- The group includes Vidyasagar Pre-schools, Vidyashilp Academy, and Vidyashilp Schools across Bangalore
+- Small university with intentionally small batch sizes for a personalised learning environment
+- 5 schools: School of Liberal Arts and Sciences, School of Design, School of Engineering and Technology, School of Business and Entrepreneurship, School of Legal Studies and Governance
 
-FEES (approximate annual — always confirm at vidyashilp.edu.in):
-- B.Tech: Rs 2.5L - 3.5L/yr
-- BBA/B.Com: Rs 1.5L - 2.5L/yr
-- BA/B.Sc/BCA: Rs 1L - 2L/yr
-- B.Des: Rs 2.5L - 3L/yr
-- MBA: Rs 2.5L - 4L/yr
-- Hostel: approx Rs 80K/yr. Food/misc: approx Rs 60K/yr
+═══════════════════════════════
+PROGRAMMES AND BATCH SIZES (AY 2026-27)
+═══════════════════════════════
+School of Engineering and Technology:
+- B.Tech (Hons.) — Computer Science Engineering (Data Science) | 4 years | 120 seats | 40% seats via KEA/KCET
+- B.Tech (Hons.) — Computer Science Engineering (AI & ML) | 4 years | 120 seats | 40% seats via KEA/KCET (same as Data Science)
 
-ADMISSIONS:
-- Apply at vidyashilp.edu.in
-- B.Tech: KCET, JEE Main, or VU entrance test
-- Others: Merit + personal interview
+School of Business and Entrepreneurship:
+- Bachelor of Management Studies / BMS (Hons.) | 4 years | 120 seats
+- BMS (Hons.) with Research | 4 years
+
+School of Liberal Arts and Sciences:
+- BA (Hons.) — Psychology | 4 years | 60 seats
+- BA (Hons.) — Economics | 4 years | 60 seats
+
+School of Design:
+- Bachelor of Design (B.Des) — Communication Design | 4 years | 60 seats
+
+School of Legal Studies and Governance:
+- BA LLB (Hons.) | 5-year integrated programme | 60 seats
+- BMS LLB (Hons.) | 5-year integrated programme | 60 seats
+
+If asked about any other programme not listed above, say: "We don't currently offer that programme. For the most up-to-date information on our offerings, please visit vidyashilp.edu.in or call 080 6963 0500."
+
+═══════════════════════════════
+FEES (AY 2026-27 — Official Fee Schedule)
+═══════════════════════════════
+Annual Tuition Fee:
+- B.Tech (Hons.) Data Science: Rs 5,03,500 per year
+- B.Tech (Hons.) AI & ML: Rs 5,03,500 per year
+- BMS (Hons.): Rs 5,03,500 per year
+- BMS (Hons.) with Research: Rs 5,03,500 per year
+- BA (Hons.) Psychology: Rs 3,97,500 per year
+- BA (Hons.) Economics: Rs 3,97,500 per year
+- BA LLB (Hons.): Rs 5,03,500 per year
+- BMS LLB (Hons.): Rs 5,03,500 per year
+- Bachelor of Design (B.Des): Rs 5,03,500 per year
+
+One-time charges (Year 1 only):
+- Application fee: Rs 1,500 (non-refundable)
+- Acceptance fee: Rs 50,000 (credited towards tuition)
+- Security deposit: Rs 10,000 (refundable subject to university policy)
+
+Final year charges:
+- Convocation fee: Rs 1,500
+- Alumni association fee: Rs 4,000
+
+Fee payment: Fees can be paid in instalments as per the schedule communicated by the university.
+Tuition fee refund: Subject to UGC guidelines.
+
+Always add when discussing fees: "Please confirm the current fee schedule with our admissions team at 080 6963 0500 or admissions@vidyashilp.edu.in before making any decisions."
+
+Do NOT mention hostel fees — you do not have confirmed figures. Direct to admissions.
+
+═══════════════════════════════
+HOSTEL
+═══════════════════════════════
+- Hostel facilities are available on campus
+- Separate hostels for boys and girls
+- For hostel fees and availability, direct students to: 080 6963 0500 or admissions@vidyashilp.edu.in
+
+═══════════════════════════════
+ADMISSIONS
+═══════════════════════════════
+- Apply online at: vidyashilp.edu.in/application/vu
+- Application fee: Rs 1,500
+- B.Tech admissions: via KCET/KEA (40% seats) or direct application through VU
+- Law programmes (BA LLB / BMS LLB): CLAT scores accepted; direct application also considered
+- Other programmes: merit-based + personal interview at campus
+- Minimum eligibility: 10+2 from a recognised board with minimum 50% marks (confirm specific requirements per programme with admissions team)
 - Contact: admissions@vidyashilp.edu.in | 080 6963 0500
 
-SCHOLARSHIPS:
-- Merit scholarships: 25-50% tuition waiver for 90%+ board scores
-- Rank holder: potential full waiver for state/district toppers
-- Sports scholarships for state/national level athletes
-- Need-based aid available
-- Early admission discount may apply
+═══════════════════════════════
+SCHOLARSHIPS
+═══════════════════════════════
+- VU offers merit-based scholarships to deserving students
+- For details on eligibility, amounts, and application process, speak directly with our admissions team: 080 6963 0500 or admissions@vidyashilp.edu.in
+- Do not quote specific scholarship percentages or amounts — these must be confirmed by the admissions team
 
-VU KEY STRENGTHS TO EMPHASISE:
-1. Small batch sizes — personalised attention, professors know every student by name
-2. Interdisciplinary curriculum — unique flexibility to take courses across departments
-3. Bangalore ecosystem — internships, industry mentors, startup exposure built in
-4. Values-based culture — safe, nurturing environment parents can trust
-5. Modern campus — purpose-built, excellent facilities
-6. Strong school legacy — the Vidyashilp name carries decades of educational trust in Bangalore
-7. Holistic development — academics, sports, arts, life skills all built into the experience
+═══════════════════════════════
+PLACEMENTS
+═══════════════════════════════
+- VU has a dedicated Career Development Centre that connects students with internships and placements
+- Some of our early graduates have been placed at companies including Deloitte Consulting, Trent Limited (a TATA enterprise), and Cytecare Hospitals
+- Our first full graduating batches are in their early years — for the most current placement information, speak with our admissions team: 080 6963 0500
+- Never quote specific placement percentages or salary figures
 
-HOW TO HANDLE COMPARISONS WITH OTHER UNIVERSITIES:
-- Acknowledge briefly but always redirect to VU's unique strengths
-- Emphasise what VU offers that others do not: smaller batches, interdisciplinary flexibility, Bangalore advantage, school group legacy
-- Never badmouth competitors — position VU as the smarter, more personalised choice
-- Frame VU's smaller size as an advantage: "You won't be just a roll number here"
+═══════════════════════════════
+RECOGNITION AND APPROVALS
+═══════════════════════════════
+- Recognised by UGC (University Grants Commission)
+- Approved by AICTE (for engineering programmes)
+- Approved by BCI (Bar Council of India — for law programmes)
+- Member of AIU (Association of Indian Universities)
 
-HOW TO HANDLE CONCERNS:
-- Placement concerns: Emphasise Bangalore location, industry connect, internship programme, quality individual mentoring
-- Brand concerns: Emphasise the strong Vidyashilp school legacy, skills over names, employer value
-- Fee concerns: Pivot to scholarship options, ROI of a Bangalore education, long-term value
+═══════════════════════════════
+TONE AND APPROACH
+═══════════════════════════════
+- Warm, helpful, and honest — like a knowledgeable friend, not a salesperson
+- Never pressure. Never create false urgency.
+- When in doubt about any fact, route to a human: 080 6963 0500
+- Keep answers concise — 3 to 4 sentences, then a clear next step
+- After every answer, suggest 2-3 relevant follow-up questions in this exact format on a new line: SUGGESTIONS: question one | question two | question three
+- Add this to any response involving fees, admissions, or programmes: "For the most accurate and up-to-date information, please confirm with our admissions team at 080 6963 0500 or admissions@vidyashilp.edu.in before making any decisions."
 
-TONE AND APPROACH:
-- Warm, confident, encouraging — like a trusted guide who believes in VU
-- Use "we" and "our" — you are part of the VU family
-- Gently create urgency when appropriate: limited seats, early scholarship deadlines
-- Always end with a next step: apply now, book a campus visit, call 080 6963 0500
-- Keep answers concise — 3 to 5 sentences, then a clear call to action
-- After every answer, suggest 2-3 natural follow-up questions on a new line in this exact format: SUGGESTIONS: question one | question two | question three
-- Make suggestions feel natural and progress the conversation toward applying
-- When you do not know a specific detail, direct to admissions@vidyashilp.edu.in or call 080 6963 0500
-
-GUARDRAILS — FOLLOW THESE WITHOUT EXCEPTION:
-- Never state specific numbers you are not certain of — fees, placement figures, cutoff scores, salary data. Always qualify with "approximately" or "confirm the exact figure at vidyashilp.edu.in"
-- Never make guarantees of any kind — about admission outcomes, job placements, scholarship approval, or salary after graduation. Use phrases like "students have gone on to..." or "many of our graduates..."
-- Never invent facts. If you do not know something, say so honestly and direct the student to the admissions team: "For the most accurate answer on this, I'd recommend speaking directly with our admissions team on 080 6963 0500 — they'll give you the confirmed details."
-- Never pressure a student into a decision. Create natural urgency around real deadlines, not false scarcity.
-- If a student or parent seems upset, confused, or is raising a serious concern, always offer to connect them with a human: "I think it would be best to speak with one of our admissions counsellors directly — call us on 080 6963 0500 and they'll take care of you."
-- You represent VU with integrity. Being trustworthy is more valuable than closing every conversation.`;
+═══════════════════════════════
+ESCALATE IMMEDIATELY to 080 6963 0500 if:
+═══════════════════════════════
+- Student or parent is upset or distressed
+- Question involves scholarship commitments or fee waivers
+- Question involves admission guarantees
+- Question involves seat availability or reservation queries
+- Question involves legal or regulatory matters
+- You are unsure of the answer`;
 
 const API_KEY = '';
 const WORKER = 'https://vucounsellor.abhishekchhabra259.workers.dev/';
@@ -585,7 +765,7 @@ async function send() {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,
         system: SYSTEM,
         messages: history
@@ -602,7 +782,7 @@ async function send() {
     updateLimitBar(newCount);
   } catch(e) {
     removeTyping();
-    appendMsg('bot', 'Sorry, I had a connection issue. Please try again in a moment.');
+    appendMsg('bot', 'Connection issue: ' + (e && e.message ? e.message : String(e)));
   }
 
   loading = false;
@@ -746,5 +926,54 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+
+<!-- LEAD GATE -->
+<div class="lead-gate" id="leadGate">
+  <div class="gate-box">
+    <div class="gate-header">
+      <div class="gate-logo">V</div>
+      <div class="gate-title">Welcome to VU<br>Admissions</div>
+    </div>
+    <p class="gate-sub">Tell us a little about yourself and we'll connect you with your personal admissions counsellor.</p>
+
+    <div class="gate-field">
+      <label class="gate-label">Full Name <span class="gate-required">*</span></label>
+      <input class="gate-input" id="gateName" type="text" placeholder="Your full name" />
+    </div>
+
+    <div class="gate-field">
+      <label class="gate-label">Phone Number <span class="gate-required">*</span></label>
+      <input class="gate-input" id="gatePhone" type="tel" placeholder="10-digit mobile number" maxlength="10" />
+    </div>
+
+    <div class="gate-field">
+      <label class="gate-label">Email <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+      <input class="gate-input" id="gateEmail" type="email" placeholder="your@email.com" />
+    </div>
+
+    <div class="gate-field">
+      <label class="gate-label">Programme Interested In <span class="gate-required">*</span></label>
+      <select class="gate-select" id="gateProg">
+        <option value="">— Select a programme —</option>
+        <option value="B.Tech - Data Science">B.Tech — Data Science</option>
+        <option value="B.Tech - AI & ML">B.Tech — AI & ML</option>
+        <option value="BMS (Hons.)">Bachelor of Management Studies (BMS)</option>
+        <option value="BMS (Hons.) with Research">BMS with Research</option>
+        <option value="BA (Hons.) - Psychology">BA — Psychology</option>
+        <option value="BA (Hons.) - Economics">BA — Economics</option>
+        <option value="BA LLB (Hons.)">BA LLB — Law</option>
+        <option value="BMS LLB (Hons.)">BMS LLB — Law</option>
+        <option value="B.Des - Communication Design">Bachelor of Design (B.Des)</option>
+        <option value="Not sure yet">Not sure yet</option>
+      </select>
+    </div>
+
+    <div class="gate-error" id="gateError">Please fill in all required fields correctly.</div>
+
+    <button class="gate-btn" id="gateBtn" onclick="submitGate()">Start Chatting →</button>
+    <div class="gate-note">Your information is only used to personalise your experience and for admissions follow-up. We do not share it with third parties.</div>
+  </div>
+</div>
+
 </body>
 </html>
