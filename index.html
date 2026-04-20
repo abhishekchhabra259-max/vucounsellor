@@ -925,6 +925,51 @@ window.addEventListener('DOMContentLoaded', () => {
   if (used >= 10) showLimitExhausted();
 });
 
+
+/* LEAD GATE */
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzl2BWePq1smAoIuYa1NcIOnfNeNV81XjDgtUzOj6UoGgUuUbTaPnqMZYps-pggdWs20w/exec';
+
+function submitGate() {
+  const name = document.getElementById('gateName').value.trim();
+  const phone = document.getElementById('gatePhone').value.trim();
+  const email = document.getElementById('gateEmail').value.trim();
+  const prog = document.getElementById('gateProg').value;
+  const errEl = document.getElementById('gateError');
+
+  let valid = true;
+  if (!name) { document.getElementById('gateName').classList.add('error'); valid = false; }
+  else document.getElementById('gateName').classList.remove('error');
+
+  if (!phone || phone.length !== 10 || !/^[0-9]+$/.test(phone)) {
+    document.getElementById('gatePhone').classList.add('error'); valid = false;
+  } else document.getElementById('gatePhone').classList.remove('error');
+
+  if (!prog) { document.getElementById('gateProg').classList.add('error'); valid = false; }
+  else document.getElementById('gateProg').classList.remove('error');
+
+  if (!valid) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  // Open chat immediately
+  sessionStorage.setItem('vu_lead_name', name);
+  sessionStorage.setItem('vu_lead_prog', prog);
+  document.getElementById('leadGate').style.display = 'none';
+
+  // Personalise welcome
+  const title = document.querySelector('.w-title');
+  if (title) title.innerHTML = 'Hi ' + name.split(' ')[0] + ", I'm your VU<br><em>Admissions Counsellor.</em>";
+
+  // Fire webhook in background
+  try {
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, phone, email, programme: prog})
+    });
+  } catch(e) {}
+}
+
 </script>
 
 <!-- LEAD GATE -->
