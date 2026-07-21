@@ -730,7 +730,7 @@ ESCALATE IMMEDIATELY to 080 6963 0500 if:
 - You are unsure of the answer`;
 
 const API_KEY = '';
-const WORKER = 'https://vucounsellor.abhishekchhabra259.workers.dev/';
+const WORKER = 'https://vucounsellor.vidyashilp.workers.dev/';
 
 let history = [];
 let loading = false;
@@ -936,18 +936,22 @@ function submitGate() {
   const prog = document.getElementById('gateProg').value;
   const errEl = document.getElementById('gateError');
 
-  let valid = true;
-  if (!name) { document.getElementById('gateName').classList.add('error'); valid = false; }
+  let errors = [];
+  if (!name) { document.getElementById('gateName').classList.add('error'); errors.push('name'); }
   else document.getElementById('gateName').classList.remove('error');
 
-  if (!phone || phone.length !== 10 || !/^[0-9]+$/.test(phone)) {
-    document.getElementById('gatePhone').classList.add('error'); valid = false;
+  if (!phone || phone.length < 10) {
+    document.getElementById('gatePhone').classList.add('error'); errors.push('phone');
   } else document.getElementById('gatePhone').classList.remove('error');
 
-  if (!prog) { document.getElementById('gateProg').classList.add('error'); valid = false; }
+  if (!prog) { document.getElementById('gateProg').classList.add('error'); errors.push('programme'); }
   else document.getElementById('gateProg').classList.remove('error');
 
-  if (!valid) { errEl.style.display = 'block'; return; }
+  if (errors.length > 0) {
+    errEl.textContent = 'Please fill in: ' + errors.join(', ');
+    errEl.style.display = 'block';
+    return;
+  }
   errEl.style.display = 'none';
 
   // Open chat immediately
